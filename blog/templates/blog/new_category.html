@@ -1,0 +1,21 @@
+{% extends 'home/base.html' %}
+
+{% block title %}Create new category{% endblock title %}
+
+{% block page %}
+    <div class="row justify-content-center" id="new-category-form">
+        <div class="col-sm-8">
+            <form action="{% url "blog:new_category" %}"  method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+
+                <div class="page-header">
+                    <h2>Create new category</h2>
+                </div>
+
+                {% include 'home/form.html' %}
+                <button type="submit" class="btn btn-success">Create</button>
+                <a class="btn btn-secondary" href="{% url 'blog:index' %}">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock page %}

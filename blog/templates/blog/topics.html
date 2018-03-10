@@ -1,0 +1,96 @@
+{% extends 'home/base.html' %}
+
+{% load humanize %}
+
+{% block title %}Topics list{% endblock title %}
+
+{% block page %}
+    {% if user.is_authenticated %}
+        <div class="mb-4">
+            <a class="btn btn-primary" href="{% url 'blog:new_topic' category.pk %}" role="button">Create new topic</a>
+        </div>
+    {% endif %}
+
+    {% if topics %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <caption>List of created topics.</caption>
+                <thead>
+                    <tr class="table-primary">
+                        <th scope="col">Topic</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Answers</th>
+                        <th scope="col">Watched</th>
+                        <th scope="col">Last message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for topic in topics %}
+                    {% url 'blog:topic_posts' category.pk topic.pk as topic_url %}
+                    <tr>
+                        <td>
+                            <p class="mb-0">
+                                <a href="{{ topic_url }}">{{ topic.subject }}</a>
+                            </p>
+                            <small class="text-muted">
+                                Pages:
+                                {% for i in topic.get_page_range %}
+                                    <a href="{{ topic_url }}?page={{ i }}">{{ i }}</a>
+                                {% endfor %}
+                                {% if topic.has_many_pages %}
+                                    ... <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
+                                {% endif %}
+                            </small>
+                            {% if user.is_authenticated %}
+                                <div class="text-right">
+                                    <a href="{% url 'blog:edit_topic' category.pk topic.pk %}" class="btn btn-warning btn-sm" role="button">Edit</a>
+                                    <a href="{% url 'blog:delete_topic' category.pk topic.pk %}" class="btn btn-danger btn-sm" role="button">DELETE</a>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>{{ topic.starter.username }}</td>
+                        <td>{{ topic.replies }}</td>
+                        <td>{{ topic.views }}</td>
+                        <td>{{ topic.last_updated|naturaltime }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <!-- Pagination -->
+    {% if topics.has_other_pages %}
+        <nav aria-label="Search results pages">
+            <ul class="pagination">
+                {% if  topics.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ topics.previous_page_number }}">previous</a>
+                    </li>
+                {% endif %}
+
+                {% for page_num in topics.paginator.page_range %}
+                    {% if topics.number == page_num %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ page_num }}<span class="sr-only">(current)</span></a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if topics.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ topics.next_page_number }}">next</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                      <span class="page-link">Next</span>
+                    </li>    
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %} <!-- End pagination -->
+{% endblock page %}

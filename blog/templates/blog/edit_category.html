@@ -1,0 +1,12 @@
+{% extends 'home/base.html' %}
+
+{% block title %}Edit category{% endblock title %}
+
+{% block page %}
+    <form action="{% url 'blog:edit_category' category_pk %}" method="post" class="mb-4" novalidate>
+        {% csrf_token %}
+        {% include 'home/form.html' %}
+        <button type="submit" class="btn btn-success">Save changes</button>
+        <a class="btn btn-secondary" href="{% url 'blog:index' %}">Cancel</a>
+    </form>
+{% endblock page %}

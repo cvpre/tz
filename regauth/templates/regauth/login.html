@@ -1,0 +1,24 @@
+{% extends 'home/base.html' %}
+
+{% block title %}SignIn{% endblock title %}
+
+{% block page %}
+        <div class="row justify-content-center" id="login-form">
+            <div class="col-sm-4">
+                <form action="{% url 'regauth:user_login' %}" method="post" novalidate>
+                    {% if request.GET.next %}
+                        <input type="hidden" name="next" value="{{ request.GET.next }}" />
+                    {% endif %}
+
+                    <div class="page-header">
+                        <h2>SignIn</h2>
+                    </div>
+
+                    {% csrf_token %}
+                    {% include 'home/form.html' %}
+                    <button type="submit" class="btn btn-success">SignIn</button>
+                    <a class="btn btn-secondary" href="{% url 'regauth:register' %}" role="button">SignUp</a>
+                </form>
+            </div>
+        </div>
+{% endblock page %}

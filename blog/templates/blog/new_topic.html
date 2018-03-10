@@ -1,0 +1,21 @@
+{% extends 'home/base.html' %}
+
+{% block title %}Create new topic{% endblock title %}
+
+{% block page %}
+    <div class="row justify-content-center" id="new-topic-form">
+        <div class="col-sm-8">
+            <form  method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="page-header">
+                    <h2>Create new topic</h2>
+                </div>
+
+                {% include 'home/form.html' %}
+                <button type="submit" class="btn btn-success">Create</button>
+                <a class="btn btn-secondary" href="{% url 'blog:topics' category.pk %}">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock page %}

@@ -1,0 +1,34 @@
+body {
+  /*padding-top: 0rem;*/
+    background-color: whitesmoke;
+}
+
+.container {
+    padding-top: 1.5rem;
+}
+
+/* LOGIN TEMPLATE */
+#login-button {
+    padding-left: 0.6rem;
+}
+
+#login-navbar li {
+    padding-right: 1rem;
+    padding-left: 0.5rem;
+
+}
+
+/* FORUM TEMPLATES */
+
+#topic-by {
+    padding: 1.5em;
+    float: left;
+}
+
+#category-list-name-padding {
+    padding-left: 1rem;
+}
+
+#text-align-center {
+    text-align: center;
+}

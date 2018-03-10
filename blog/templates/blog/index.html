@@ -1,0 +1,64 @@
+{% extends 'home/base.html' %}
+
+{% load static %}
+
+{% block title %}Blog - categories{% endblock %}
+
+{% block page %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <caption>Categories</caption>
+            <thead class="table-primary">
+                <tr>
+                    <th id="text-align-center" scope="col">Category</th>
+                    <th id="text-align-center" scope="col">Topics</th>
+                    <th id="text-align-center" scope="col">Posts</th>
+                    <th id="text-align-center" scope="col">Last message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if user.is_authenticated %}
+                    <div class="mb-4">
+                        <a class="btn btn-primary" href="{% url 'blog:new_category' %}" role="button">Create category</a>
+                    </div>
+                {% endif %}
+                {% for category in categories %}
+                    <tr>
+                        <td>
+                            <img src="{{ category.image.url }}" class="rounded float-left" alt="My image" alt="..." width="50">
+                            <a id="category-list-name-padding" href="{% url 'blog:topics' category.pk %}">{{ category.name }}</a><br>
+                            <small id="category-list-name-padding" style="color: #888">{{ category.description }}</small>
+                            {% if user.is_authenticated %}
+                                <div class="text-right">
+                                    <a href="{% url 'blog:edit_category' category.pk %}" class="btn btn-warning btn-sm" role="button">Edit</a>
+                                    <a href="{% url 'blog:delete_category' category.pk %}" class="btn btn-danger btn-sm" role="button">DELETE</a>
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle" id="text-align-center">
+                            {{  category.topics.count }}
+                        </td>
+                        <td class="align-middle" id="text-align-center">
+                            {{ category.get_posts_count }}
+                        </td>
+                        <td id="text-align-center">
+                            {% with post=category.get_last_post %}
+                                {% if post %}
+                                    <small>
+                                        <a href="{% url 'blog:topic_posts' category.pk post.topic.pk %}">
+                                            Author:  {{ post.created_by.username }} <br> {{ post.created_at }}
+                                        </a>
+                                    </small>
+                                {% else %}
+                                    <small class="text-muted">
+                                        <em>No messages.</em>
+                                    </small>
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock page %}
